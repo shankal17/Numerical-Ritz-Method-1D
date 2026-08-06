@@ -1,10 +1,9 @@
 using Revise
 using ritz_method
+using Optim: minimizer
+sample_function(x, y, y_prime) = y_prime^2 - y^2 - 2*x*y
 
-sample_function(x) = x^3
+my_domain = Interval(0.0, 1.0)
 
-my_domain = Interval(-3.0, 2.0)
-
-res = integrate_function(sample_function, my_domain, 3)
-
-println(res)
+res = ritz(sample_function, my_domain, [x->x*(1-x), x->x^2*(1-x)]; num_quad_nodes=5)
+minimizer(res)
