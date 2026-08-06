@@ -24,7 +24,7 @@ end
 function ritz(
     F::Function,
     domain::Interval,
-    phi_s::Vector{<:Function};
+    phi_s::Vector{Function};
     phi_0::Function = x-> 0.0,
     num_quad_nodes::Int = 15,
     initial_coeffs::Vector{Float64} = zeros(length(phi_s))
