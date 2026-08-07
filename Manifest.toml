@@ -543,7 +543,7 @@ deps = ["Artifacts", "Libdl"]
 uuid = "8e850b90-86db-534c-a0d3-1478176c7d93"
 version = "5.15.0+0"
 
-[[deps.ritz_method]]
+[[deps.RitzMethod]]
 deps = ["ArgCheck", "FastGaussQuadrature", "ForwardDiff", "LinearAlgebra", "Optim", "Revise"]
 path = "."
 uuid = "cddcfe6e-9e48-40d7-a9cb-30d977f31d38"
