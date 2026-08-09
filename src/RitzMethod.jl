@@ -58,8 +58,8 @@ The integral is evaluated via Gauss-Legendre quadrature, and the coefficients
 - `phi_0::Function = x -> 0.0`: fixed term `\\phi_0(x)` added to the trial solution, typically used to satisfy boundary conditions.
 - `num_quad_nodes::Int = 15`: number of Gauss-Legendre quadrature nodes.
 - `initial_coeffs::Vector{Float64} = zeros(length(phi_s))`: initial guess for the coefficients `c_i`.
-- `method::Optim.AbstractOptimizer = BFGS()`: optimization algorithm used to minimize the objective, e.g. `LBFGS()`, `ConjugateGradient()`, `NelderMead()`. See the [Optim.jl documentation](https://julianlsolvers.github.io/Optim.jl/stable/) for available algorithms.
-- `options::Optim.Options = Optim.Options()`: convergence and iteration settings for `method` (e.g. `iterations`, `g_tol`, `f_tol`, `show_trace`).
+- `method::Optim.AbstractOptimizer = BFGS()`: optimization algorithm used to minimize the objective. See the [Optim.jl documentation](https://julianlsolvers.github.io/Optim.jl/stable/) for available algorithms.
+- `options::Optim.Options = Optim.Options()`: convergence and iteration settings for `method`.
 
 # Returns
 An `Optim.OptimizationResults` object; the minimizing coefficients are available via `Optim.minimizer(result)`.
