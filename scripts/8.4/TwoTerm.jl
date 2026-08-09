@@ -9,10 +9,10 @@ my_domain = Interval(0.0, 2.0)
 basis = [x->x*(2-x), x->x^2*(2-x)]
 
 # Customize the optimizer algorithm and convergence settings
-res_custom = minimizefunctional(
+res = minimizefunctional(
     sample_function, my_domain, basis;
     num_quad_nodes=5,
     method=BFGS(),
     options=Options(iterations=50, g_abstol=1e-20, x_reltol=1e-8),
 )
-minimizer(res_custom)
+minimizer(res)
