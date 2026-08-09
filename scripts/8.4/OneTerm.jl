@@ -1,6 +1,6 @@
 using Revise
 using RitzMethod
-using Optim: minimizer, BFGS, Options
+import Optim
 
 sample_function(x, y, y_prime) = y_prime^2 + y^2 + 2*x*y
 
@@ -12,7 +12,7 @@ basis = [x->x*(2-x)]
 res = minimizefunctional(
     sample_function, my_domain, basis;
     num_quad_nodes=5,
-    method=BFGS(),
-    options=Options(iterations=50, g_abstol=1e-20, x_reltol=1e-8),
+    method=Optim.BFGS(),
+    options=Optim.Options(iterations=50, g_abstol=1e-20, x_reltol=1e-8),
 )
-minimizer(res)
+Optim.minimizer(res)
