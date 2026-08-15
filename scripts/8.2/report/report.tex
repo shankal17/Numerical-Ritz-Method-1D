@@ -10,6 +10,7 @@
 \floatplacement{figure}{H}
 \usepackage{microtype}
 \usepackage{hyperref}
+\renewcommand{\caption}[1]{}
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{1.2ex}
 
@@ -122,6 +123,19 @@
 \newcommand{\HLJLgsB}[1]{#1}
 \newcommand{\HLJLgt}[1]{#1}
 
+
+\definecolor{codebg}{RGB}{251,251,251}
+\definecolor{codeframe}{RGB}{204,204,204}
+\lstset{
+    backgroundcolor=\color{codebg},
+    frame=single,
+    rulecolor=\color{codeframe},
+    framesep=5pt,
+    xleftmargin=2pt,
+    xrightmargin=2pt,
+    framextopmargin=3pt,
+    framexbottommargin=3pt,
+}
 
 \begin{document}
 
@@ -237,7 +251,7 @@ Term count | Minimized J[y] | Coefficients
 
 \begin{figure}[!h]
 \center
-\includegraphics[width=\linewidth]{jl_R6ekgH/report_7_1.pdf}
+\includegraphics[width=\linewidth]{jl_vDz3vs/report_7_1.pdf}
 \caption{Ritz Approximations}
 \end{figure}
 
@@ -245,7 +259,7 @@ Term count | Minimized J[y] | Coefficients
 
 \begin{figure}[!h]
 \center
-\includegraphics[width=\linewidth]{jl_R6ekgH/report_8_1.pdf}
+\includegraphics[width=\linewidth]{jl_vDz3vs/report_8_1.pdf}
 \caption{Pointwise error between Ritz approximations and the exact solution.}
 \end{figure}
 

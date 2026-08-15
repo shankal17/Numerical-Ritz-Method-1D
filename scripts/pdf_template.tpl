@@ -13,6 +13,7 @@
 {{#:tex_deps}}
 {{{ :tex_deps }}}
 {{/:tex_deps}}
+\renewcommand{\caption}[1]{}
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{1.2ex}
 
@@ -38,6 +39,19 @@
 {{/:date}}
 
 {{ :highlight }}
+
+\definecolor{codebg}{RGB}{251,251,251}
+\definecolor{codeframe}{RGB}{204,204,204}
+\lstset{
+    backgroundcolor=\color{codebg},
+    frame=single,
+    rulecolor=\color{codeframe},
+    framesep=5pt,
+    xleftmargin=2pt,
+    xrightmargin=2pt,
+    framextopmargin=3pt,
+    framexbottommargin=3pt,
+}
 
 \begin{document}
 
