@@ -78,11 +78,16 @@ result.y(0.5)       # approximate solution at x = 0.5
 
 `scripts/` contains full worked examples for two Gelfand & Fomin problems, each comparing 1-, 2-, and 3-term Ritz approximations against the closed-form exact solution:
 
-- [`scripts/8.2/report.jmd`](scripts/8.2/report.jmd) — Problem 8.2, domain `[0, 1]`
-- [`scripts/8.4/report.jmd`](scripts/8.4/report.jmd) — Problem 8.4, domain `[0, 2]`
+- [`scripts/8.2/report.jmd`](scripts/8.2/report.jmd) — Problem 8.2
+- [`scripts/8.4/report.jmd`](scripts/8.4/report.jmd) — Problem 8.4
 
-These are [Weave.jl](https://weavejl.mpastell.com/stable/) documents. Run `scripts/build_reports.jl` to render them to HTML (output goes to `scripts/*/report/report.html`).
+These are [Weave.jl](https://weavejl.mpastell.com/stable/) documents. Run `scripts/build_reports.jl` to render them to HTML, latex, and pdfs (output goes to `scripts/*/report/*`).
 
+The compiled pdfs can be found at:
+- [`scripts/8.2/report/report.pdf`](scripts/8.2/report/report.pdf) — Problem 8.2
+- [`scripts/8.2/report/report.pdf`](scripts/8.4/report/report.pdf) — Problem 8.4
+
+The images make awkward page breaks in the pdf, but the html looks great.
 ## Project structure
 
 ```
