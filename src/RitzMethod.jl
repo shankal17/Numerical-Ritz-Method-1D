@@ -1,13 +1,14 @@
 module RitzMethod
 
+import Optim
+
 using ArgCheck
 using ForwardDiff: derivative
 using FastGaussQuadrature: gausslegendre
 using LinearAlgebra: dot
 using ADTypes: AutoForwardDiff
-using Optim: optimize, BFGS, AbstractOptimizer, Options
 
-export Interval, minimizefunctional
+export Interval, minimizefunctional, RitzResult, summarize
 
 """
     Interval(low, high)
@@ -62,7 +63,15 @@ The integral is evaluated via Gauss-Legendre quadrature, and the coefficients
 - `options::Optim.Options = Optim.Options()`: convergence and iteration settings for `method`.
 
 # Returns
-An `Optim.OptimizationResults` object; the minimizing coefficients are available via `Optim.minimizer(result)`.
+A [`RitzResult`](@ref) containing:
+- `coeffs`: the optimized coefficients `c_i`.
+- `minimized_value`: the minimized value of the functional `J[y]`.
+- `domain`: the interval `[a, b]` the functional was minimized over.
+- `converged`: whether the optimizer reported convergence.
+- `y`: the trial solution as a callable function, `y(x) = phi_0(x) + sum(c_i * phi_i(x))`.
+
+For example, `result.coeffs` gives the coefficient vector and `result.y(0.5)` evaluates
+the approximate solution at `x = 0.5`.
 
 # Throws
 - `ArgumentError` (via `@argcheck`) if `length(phi_s) != length(initial_coeffs)` or `num_quad_nodes <= 0`.
@@ -74,9 +83,9 @@ function minimizefunctional(
     phi_0::Function = x-> 0.0,
     num_quad_nodes::Int = 15,
     initial_coeffs::Vector{Float64} = zeros(length(phi_s)),
-    method::AbstractOptimizer = BFGS(),
-    options::Options = Options(),
-)
+    method::Optim.AbstractOptimizer = Optim.BFGS(),
+    options::Optim.Options = Optim.Options(),
+)::RitzResult
     @argcheck length(phi_s) == length(initial_coeffs)
     @argcheck num_quad_nodes > 0
 
@@ -103,10 +112,82 @@ function minimizefunctional(
     end
 
     # Optimize
-    res = optimize(objective, initial_coeffs, method, options; autodiff = AutoForwardDiff())
+    res = Optim.optimize(objective, initial_coeffs, method, options; autodiff = AutoForwardDiff())
 
-    return res
+    return postprocessoptimization(res, domain, phi_s, phi_0)
 end
 
+"""
+    RitzResult
+
+Result of a Ritz method optimization, as returned by [`minimizefunctional`](@ref).
+
+# Fields
+- `coeffs::Vector{Float64}`: the optimized coefficients `c_i`.
+- `minimized_value::Float64`: the minimized value of the functional `J[y]`.
+- `domain::Interval`: the interval `[a, b]` over which the functional was minimized.
+- `converged::Bool`: whether the underlying optimizer reported convergence.
+- `y::Function`: the trial solution `y(x) = phi_0(x) + sum(c_i * phi_i(x))`, callable as `y(x)`.
+"""
+struct RitzResult
+    coeffs::Vector{Float64}
+    minimized_value::Float64
+    domain::Interval
+    converged::Bool
+    y::Function
+end
+
+"""
+    summarize(result::RitzResult)::String
+
+Build a human-readable summary of a [`RitzResult`](@ref).
+
+# Arguments
+- `result::RitzResult`: the result to summarize.
+
+# Returns
+A multi-line `String` describing the domain, optimized coefficients,
+minimized functional value, and convergence status.
+"""
+function summarize(result::RitzResult)::String
+    return """
+    RitzResult:
+      Domain:          [$(result.domain.low), $(result.domain.high)]
+      Coefficients:    $(result.coeffs)
+      Minimized value: $(result.minimized_value)
+      Converged:       $(result.converged)"""
+end
+
+Base.show(io::IO, result::RitzResult) = print(io, summarize(result))
+
+"""
+    postprocessoptimization(res, domain, phi_s, phi_0)
+
+Build a [`RitzResult`](@ref) from the raw output of `Optim.optimize`.
+
+# Arguments
+- `res::Optim.OptimizationResults`: the result returned by `Optim.optimize`.
+- `domain::Interval`: the interval `[a, b]` the functional was minimized over.
+- `phi_s::Vector`: basis functions `\\phi_i` used to build the trial solution.
+- `phi_0::Function`: fixed term `\\phi_0(x)` added to the trial solution.
+
+# Returns
+A [`RitzResult`](@ref) containing the optimized coefficients, minimized value,
+domain, convergence flag, and the resulting trial solution `y(x) = phi_0(x) + sum(c_i * phi_i(x))`.
+"""
+function postprocessoptimization(
+    res::Optim.OptimizationResults,
+    domain::Interval,
+    phi_s::Vector,
+    phi_0::Function,
+)::RitzResult
+    coeffs = copy(Optim.minimizer(res))
+    minimized_value = Optim.minimum(res)
+    conv = Optim.converged(res)
+
+    y(x) = phi_0(x) + sum(coeffs[i] * phi_s[i](x) for i in eachindex(phi_s); init = 0.0)
+
+    return RitzResult(coeffs, minimized_value, domain, conv, y)
+end
 
 end # module ritz_method
