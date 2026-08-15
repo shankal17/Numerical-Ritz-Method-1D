@@ -1,0 +1,5 @@
+[deps]
+Optim = "429524aa-4258-5aef-a3af-852621145aeb"
+Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
+RitzMethod = "cddcfe6e-9e48-40d7-a9cb-30d977f31d38"
+Weave = "44d3d7a6-8a23-5bf8-98c5-b353f8df5ec9"

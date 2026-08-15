@@ -1,0 +1,95 @@
+---
+title : Ritz Method — Gelfand & Fomin Problem 8.2
+author : Austin Shank
+date : 2026-08-14
+---
+
+# Problem Statement
+
+![Problem 8.2](../imgs/gelfand-fomin_8_2.png)
+
+# Solution
+
+## Exact Solution
+
+![Problem 8.2](../imgs/exact_soln_8_2.png)
+
+We will define the julia function of this for comparison against the approximations
+```julia; results="hidden"
+y_exact(x) = sin(x) / sin(1) - x
+have_exact = !isnothing(y_exact)
+```
+
+## Ritz Approximations
+We will use the `RitzMethod` package
+```julia; results="hidden"
+using RitzMethod
+import Optim
+import Plots
+
+# Define problem and basis
+integrand(x, y, y_prime) = y_prime^2 - y^2 - 2 * x * y
+domain = Interval(0.0, 1.0)
+full_basis = [x -> x^k * (1 - x) for k in 1:3]
+
+function solve_ritz(n_terms)
+    minimizefunctional(
+        integrand, domain, full_basis[1:n_terms];
+        num_quad_nodes=5,
+        method=Optim.BFGS(),
+        options=Optim.Options(iterations=50, g_abstol=1e-20, x_reltol=1e-8),
+    )
+end
+
+results = [solve_ritz(n) for n in 1:3]
+```
+
+### One-Term Approximation
+
+```julia;
+println(summarize(results[1]))
+```
+
+### Two-Term Approximation
+
+```julia;
+println(summarize(results[2]))
+```
+
+### Three-Term Approximation
+
+```julia;
+println(summarize(results[3]))
+```
+
+# Comparison
+
+```julia; echo=false
+using Printf
+println("Term count | Minimized J[y] | Coefficients")
+for (n, r) in enumerate(results)
+    @printf("%-10d | %-14.8f | %s\n", n, r.minimized_value, r.coeffs)
+end
+```
+
+```julia; echo=false; fig_cap="Ritz Approximations"
+xs = range(domain.low, domain.high; length=200)
+plt = Plots.plot(xs, results[1].y.(xs); label="1-term", xlabel="x", ylabel="y(x)")
+Plots.plot!(plt, xs, results[2].y.(xs); label="2-term")
+Plots.plot!(plt, xs, results[3].y.(xs); label="3-term")
+if have_exact
+    Plots.plot!(plt, xs, y_exact.(xs); label="exact", linestyle=:dash, linewidth=2)
+end
+plt
+```
+
+# Approximation Error
+
+```julia; echo=false; fig_cap="Pointwise error between Ritz approximations and the exact solution."
+if have_exact
+    err_plt = Plots.plot(xs, results[1].y.(xs) .- y_exact.(xs); label="1-term", xlabel="x", ylabel="Absolute Error")
+    Plots.plot!(err_plt, xs, results[2].y.(xs) .- y_exact.(xs); label="2-term")
+    Plots.plot!(err_plt, xs, results[3].y.(xs) .- y_exact.(xs); label="3-term")
+    err_plt
+end
+```
