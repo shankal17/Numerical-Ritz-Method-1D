@@ -6,6 +6,8 @@
 \usepackage{bm}
 \usepackage{graphicx}
 \setkeys{Gin}{width=\linewidth,keepaspectratio}
+\usepackage{float}
+\floatplacement{figure}{H}
 \usepackage{microtype}
 \usepackage{hyperref}
 \setlength{\parindent}{0pt}
@@ -215,8 +217,7 @@ RitzResult:
 \begin{lstlisting}
 RitzResult:
   Domain:          [0.0, 2.0]
-  Coefficients:    [-0.22826086956521813, -0.09510869565217232, -0.02853260
-869565301]
+  Coefficients:    [-0.22826086956521813, -0.09510869565217232, -0.02853260869565301]
   Minimized value: -0.5173913043478264
   Converged:       true
 \end{lstlisting}
@@ -228,14 +229,13 @@ RitzResult:
 Term count | Minimized J[y] | Coefficients
 1          | -0.47619048    | [-0.35714285714285726]
 2          | -0.51677019    | [-0.20496894409937896, -0.15217391304347833]
-3          | -0.51739130    | [-0.22826086956521813, -0.09510869565217232, 
--0.02853260869565301]
+3          | -0.51739130    | [-0.22826086956521813, -0.09510869565217232, -0.02853260869565301]
 \end{lstlisting}
 
 
 \begin{figure}[!h]
 \center
-\includegraphics[width=\linewidth]{jl_Z1VA2e/report_7_1.pdf}
+\includegraphics[width=\linewidth]{jl_12Mwkc/report_7_1.pdf}
 \caption{Ritz Approximations}
 \end{figure}
 
@@ -243,7 +243,7 @@ Term count | Minimized J[y] | Coefficients
 
 \begin{figure}[!h]
 \center
-\includegraphics[width=\linewidth]{jl_Z1VA2e/report_8_1.pdf}
+\includegraphics[width=\linewidth]{jl_12Mwkc/report_8_1.pdf}
 \caption{Pointwise error between Ritz approximations and the exact solution.}
 \end{figure}
 

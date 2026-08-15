@@ -1,5 +1,10 @@
 using Weave
 
+# Weave hard-wraps chunk output at :line_width (75) chars, splitting tokens
+# (e.g. numbers) mid-character. Disable it and let the output renderers
+# (lstlisting's breaklines, HTML's normal wrapping) handle line wrapping instead.
+set_chunk_defaults!(:wrap, false)
+
 const PDF_TEMPLATE = joinpath(@__DIR__, "pdf_template.tpl")
 
 for dir in filter(isdir, readdir("scripts"; join=true))

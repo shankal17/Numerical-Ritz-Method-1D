@@ -6,6 +6,8 @@
 \usepackage{bm}
 \usepackage{graphicx}
 \setkeys{Gin}{width=\linewidth,keepaspectratio}
+\usepackage{float}
+\floatplacement{figure}{H}
 \usepackage{microtype}
 \usepackage{hyperref}
 {{#:tex_deps}}
